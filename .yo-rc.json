@@ -27,5 +27,9 @@
       "sample": "todoMVC",
       "router": "uirouter"
     }
+  },
+  "generator-mocha": {
+    "ui": "bdd",
+    "rjs": false
   }
 }
