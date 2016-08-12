@@ -40,5 +40,8 @@
         "single"
       ]
     }
+  },
+  "dependencies": {
+    "whatwg-fetch": "^1.0.0"
   }
 }
