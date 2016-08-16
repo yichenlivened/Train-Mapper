@@ -32,7 +32,17 @@ if (!window.indexedDB) {
   }
 }
 
-function txtToArray(txt) {
+var GTFS;
+
+GTFS = function () {
+  this.filesName = ['calendar', 'calendar_dates', 'stop_times', 'stops', 'trips'];
+};
+
+GTFS.prototype.filePath = function (fileName  ) {
+  return '/data/' + fileName + '.txt';
+};
+
+GTFS.prototype.txtToArray = function(txt){
   var array = [];
   var tmp;
   var arrMatches = txt.match(/[^\r\n]+/g);
@@ -46,30 +56,14 @@ function txtToArray(txt) {
     array.push(tmp);
   });
   return array;
-}
-
-var GTFS;
-
-GTFS = function () {
-  this.filesName = ['calendar', 'calendar_dates', 'stop_times', 'stops', 'trips']
-  this.filesData = {};
 };
 
-GTFS.prototype.filePath = function (fileName) {
-  return '/data/' + fileName + '.txt';
-};
-
-GTFS.prototype.getData = function () {
+GTFS.prototype.getData = function (name) {
   var self = this;
-  self.filesName.forEach(function (fileName) {
-    fetch(self.filePath(fileName)).then(function (res) {
-      return res.text();
-    }).then(function (data) {
-      self.filesData[fileName] = txtToArray(data);
-    }).catch(function (error) {
-      console.log('Error: ', error);
-    });
+  return fetch(self.filePath(name)).then(function(res){
+    return res.text();
+  }).catch(function(error){
+    console.log('fetch data error: '+ error);
   });
-  console.log(self.filesData);
 };
 
