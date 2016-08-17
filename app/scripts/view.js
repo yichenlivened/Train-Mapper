@@ -8,11 +8,11 @@ view = {
     inputs: [{
       name : 'departure',
       dataFrom: 'stops',
-      placeholder: 'enter your departure station'
+      placeholder: 'Enter your departure station'
     },{
       name : 'arrive',
       dataFrom: 'stops',
-      placeholder: 'enter your arrive station'
+      placeholder: 'Enter your arrive station'
     }
     ]
   }],
@@ -22,11 +22,14 @@ view = {
     self.$main = $('#main');
     self.formList.forEach(function(form){
       self.initForm(form.name, form.inputs);
-    })
+    });
+    self['$result'] = $('<div/>',{
+      'id': 'result'
+    }).appendTo(self.$main);
   },
   initForm: function(name, inputs){
     var self = this;
-    self['$form-' + name] = $('<div/>',{
+    self['$form-' + name] = $('<form/>',{
       'id': name
     }).appendTo(self.$main);
     inputs.forEach(function(input){
@@ -60,66 +63,54 @@ view = {
       var opt = $('option[value="'+$(this).val()+'"]');
       var check = true;
       self[input + 'Val'] = opt.val();
+      self.$result.html('');
       self.formList[0].inputs.forEach(function(input){
         if(self[input.name + 'Val'] === undefined || self[input.name + 'Val'] === null){
           check = false;
         }
       });
       if(check){
-        console.log(self['departureVal'], self['arriveVal']);
         TM.searchSchedule(self['departureVal'], self['arriveVal'])
           .then(function(results) {
-            self.showSchedule(results, self['departureVal'], self['arriveVal']);
-          });
+            self.showResult(controller.getSchedule(results, self['departureVal'], self['arriveVal']));
+         });
       }
     })
   },
-  showSchedule: function(data, departure_stop, arrival_stop){
-    // Organize Departure to Arrival station
-    var schedules = [];
-    var departureData = null;
-    var arrivalData = null;
-    // A set of departure, arrival, and duration of trip
-    var scheduleObject = {};
-
-    for (var i = 0; data.length > i; i++) {
-      // Sort to get the data of departure or arrival
-      if (data[i].stops.stop_name === departure_stop) {
-        departureData = data[i].stop_times;
-        continue;
-      } else {
-        arrivalData = data[i].stop_times;
-      }
-
-      if (departureData &&
-        arrivalData &&
-        departureData.trip_id === arrivalData.trip_id &&
-        departureData.departure_time < arrivalData.arrival_time) {
-        scheduleObject = {
-          'departure': departureData.departure_time,
-          'arrival': arrivalData.arrival_time,
-          // Calculate duration of trips between departure and arrival
-          'duration': getDuration(departureData.departure_time, arrivalData.arrival_time)
-        };
-        schedules.push(scheduleObject);
-        departureData = null;
-        scheduleObject = null;
-      }
-    }
-
+  showResult:function(schedules){
+    var self = this;
+    self.$result.html('');
     if (schedules.length > 0) {
+      //init result table
+      self['$table-result'] = $('<table/>',{
+        'id': 'table-result',
+        'class':'table'
+      }).appendTo(self.$result);
+      self['$table-result'].html('<thead><tr>' +
+        '<th>Departure</th>' +
+        '<th>Arrive Time</th>' +
+        '<th>Duration</th>' +
+        '</tr></thead>'
+        );
+      self['$search-result'] = $('<tbody/>',{
+        'id': 'search-result'
+      }).appendTo(self['$table-result']);
       // Display the matched schedule
-
       // Sort the schedule order by departure time and display them
       schedules.sort(sortSchedules).forEach(function(info) {
+        self['$search-result'].append(
+          '<tr>' +
+          '<td>' + info.departure +'</td>' +
+          '<td>' + info.arrival +'</td>' +
+          '<td>' + info.duration +'</td>' +
+          '</tr>');
       });
-
-      console.log(schedules);
-
-    } else {
-
+    } else{
+      self['$table-result'] = $('<p/>',{
+        'class':'',
+        'html':'No result.'
+      }).appendTo(self.$result);
     }
-
   }
 };
 
@@ -145,7 +136,6 @@ function sortSchedules(a, b) {
     return 0;
   }
 }
-
 
 function hhmmssToSeconds(time) {
   var t = time.split(':');

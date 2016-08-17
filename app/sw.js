@@ -1,8 +1,8 @@
 var staticCacheName = 'train-mapper-static-v2';
 
-self.addEventListener('install', function (event) {
+self.addEventListener('install', function(event) {
   event.waitUntil(
-    caches.open(staticCacheName).then(function (cache) {
+    caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
         '/',
         '/fonts/glyphicons-halflings-regular.eot',
@@ -25,7 +25,9 @@ self.addEventListener('install', function (event) {
         '/bower_components/bootstrap-sass/assets/javascripts/bootstrap/scrollspy.js',
         '/bower_components/bootstrap-sass/assets/javascripts/bootstrap/collapse.js',
         '/bower_components/bootstrap-sass/assets/javascripts/bootstrap/tab.js',
+        'https://www.google-analytics.com/analytics.js',
         '/scripts/databse.js',
+        '/scripts/model.js',
         '/scripts/view.js',
         '/scripts/controller.js',
         '/scripts/main.js',
@@ -37,13 +39,13 @@ self.addEventListener('install', function (event) {
   );
 });
 
-self.addEventListener('activate', function (event) {
+self.addEventListener('activate', function(event){
   event.waitUntil(
-    caches.keys().then(function (cacheNames) {
+    caches.keys().then(function(cacheNames){
       return Promise.all(
-        cacheNames.filter(function (cacheName) {
+        cacheNames.filter(function(cacheName){
           return cacheName.startsWith('train-mapper-static-') && cacheName != staticCacheName;
-        }).map(function (cacheName) {
+        }).map(function(cacheName){
           return cache.delete(cacheName);
         })
       );
@@ -51,13 +53,17 @@ self.addEventListener('activate', function (event) {
   )
 });
 
-self.addEventListener('fetch', function (event) {
-  event.respondWith(
-    caches.match(event.request).then(function (response) {
-      if (response) {
-        return response;
-      }
-      return fetch(event.request);
-    })
-  );
+self.addEventListener('fetch', function(event){
+    event.respondWith(
+      caches.match(event.request).then(function(response){
+        if(!response){
+          console.log('Uncached: ' + event.request.url);
+        }
+          if(response){
+            console.log('Cached: ' + response.url);
+            return response;
+          }
+          return fetch(event.request);
+        })
+    );
 });

@@ -245,6 +245,11 @@ GTFS.prototype.retrieveStops = function() {
     .exec();
 };
 
+
+/**
+ * Helper functions
+ */
+
 // Remove starting & ending quotation marks of a string if exists
 function removeQuotations(text) {
   if ( text.startsWith('"') ) {
