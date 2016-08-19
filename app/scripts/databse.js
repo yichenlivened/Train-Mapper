@@ -152,7 +152,7 @@ GTFS.prototype.importFromTxtToDB = function(table, data) {
   // Split the text file data by each line
   var lines = data.split(/\r\n/);
   // The first line is the column name of a table
-  var tableColumnNames = lines[0].split(",");
+  var tableColumnNames = lines[0].split(',');
   // Loop through each line (except the column name line)
   var rows = [];
   for(var i = 1; i < lines.length; i++){
@@ -161,7 +161,7 @@ GTFS.prototype.importFromTxtToDB = function(table, data) {
       continue;
     }
     var obj = {};
-    var currentline = lines[i].split(",");
+    var currentline = lines[i].split(',');
 
     for(var j = 0; j < tableColumnNames.length; j++){
       // Trim and remove extra quotations of a string before
