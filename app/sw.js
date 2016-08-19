@@ -25,7 +25,7 @@ self.addEventListener('install', function(event) {
         '/bower_components/bootstrap-sass/assets/javascripts/bootstrap/scrollspy.js',
         '/bower_components/bootstrap-sass/assets/javascripts/bootstrap/collapse.js',
         '/bower_components/bootstrap-sass/assets/javascripts/bootstrap/tab.js',
-        'https://www.google-analytics.com/analytics.js',
+        '/scripts/service-worker.js ',
         '/scripts/databse.js',
         '/scripts/model.js',
         '/scripts/view.js',

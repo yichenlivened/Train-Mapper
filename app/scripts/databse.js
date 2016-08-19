@@ -20,7 +20,6 @@ GTFS.prototype.getDBConnection = function() {
       self.db = db;
       self.createDatabase();
       self.insertData();
-
       return db;
     });
 };

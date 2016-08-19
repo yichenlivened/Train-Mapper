@@ -40,7 +40,7 @@ view = {
     var self = this;
     self[input.name + 'Val'] = null;
     var html =
-      '<label for="input-' + input.name +'">' + input.name + ': </label>' +
+      '<label for="input-' + input.name +'">' + capitalizeFirstLetter(input.name) + ': </label>' +
       '<input id="input-' + input.name +'" list="' + input.name + '-list"' + 'placeholder="' + input.placeholder+ '">' +
       '<datalist id="' + input.name + '-list">'+ self.getOptions(view.stops) + '</datalist>';
 
@@ -118,6 +118,10 @@ view = {
 /**
  * Helper functions
  */
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 function getDuration(departure_time, arrival_time) {
   var dSec = hhmmssToSeconds(departure_time);
