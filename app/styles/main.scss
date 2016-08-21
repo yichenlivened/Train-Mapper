@@ -15,6 +15,10 @@ $icon-font-path: '../fonts/';
   display: none;
 }
 
+html{
+ font-family: Source Sans Pro,Helvetica,Arial,Geneva,sans-serif;
+}
+
 .container{
   background-color:white;
   height: 100vh;
@@ -22,25 +26,34 @@ $icon-font-path: '../fonts/';
 }
 /* Custom page header */
 .header {
-  border-bottom: 1px solid #e5e5e5;
-
-  /* Make the masthead heading the same height as the navigation */
-  h3 {
-    margin-top: 0;
-    margin-bottom: 0;
-    line-height: 40px;
-    padding-bottom: 19px;
+  background-color: #0080C6;
+  text-align: center;
+  h3{
+    height: 50px;
+    line-height: 50px;
+    margin: 0px;
+    color:white;
+    font-size: 20px;
+    font-weight: 400;
   }
 }
 
-.header {
-  margin-bottom: 30px;
+main{
+  padding-top: 20px;
+
+  input{
+    height: 38px;
+    font-size: 14px;
+    font-weight: 200;
+    padding-left:7px;
+  }
 }
 
 .form-group{
   label{
-    display:block;
-    font-size: 24px;
+    font-size: 14px;
+    font-weight: normal;
+    text-transform: none;
   }
   input{
     width: 100%;

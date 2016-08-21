@@ -150,7 +150,7 @@ GTFS.prototype.insertData = function() {
 
 GTFS.prototype.importFromTxtToDB = function(table, data) {
   // Split the text file data by each line
-  var lines = data.split(/\r\n/);
+  var lines = data.split(/\r?\n/);
   // The first line is the column name of a table
   var tableColumnNames = lines[0].split(',');
   // Loop through each line (except the column name line)
